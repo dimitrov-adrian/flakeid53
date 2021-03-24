@@ -14,6 +14,9 @@
     "bugs": {
         "url": "https://github.com/dimitrov-adrian/flakeid53/issues"
     },
+    "publishConfig": {
+        "registry": "https://npm.pkg.github.com"
+    },
     "keywords": [
         "snowflake",
         "distributed id",
@@ -21,7 +24,7 @@
         "id"
     ],
     "engines": {
-        "node": "^12"
+        "node": ">=12.0.0"
     },
     "scripts": {
         "test": "NODE_NO_WARNINGS=1 NODE_OPTIONS='--experimental-vm-modules --trace-warnings --trace-uncaught' jest"

@@ -15,11 +15,11 @@ export default function createFlakeID53({ epoch, workerId }) {
     let sequenceRound = 0;
 
     if (!epoch) {
-        throw Error('No epoch set');
+        throw Error("No epoch set");
     }
 
     if (workerId && !Number.isInteger(workerId)) {
-        throw Error('Cannot use id out of 0..9');
+        throw Error("Cannot use id out of 0..9");
     }
 
     workerId = (workerId || 0) % 10;
@@ -53,7 +53,7 @@ export default function createFlakeID53({ epoch, workerId }) {
             sequenceRound = 0;
             sequenceTime = current;
         } else if (sequenceTime > current) {
-            return reject('Clock is shifted');
+            return reject("Clock is shifted");
         } else {
             sequenceRound++;
         }
