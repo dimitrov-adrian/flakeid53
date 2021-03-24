@@ -60,8 +60,10 @@ const flakeId = createFlakeID53({
 
 ### Generate ID
 
+`nextId()` returns a promise that resolve to next ID number.
+
 ```js
-flakeId.nextId();
+await flakeId.nextId();
 
 // Outputs: 8470564087028
 ```
