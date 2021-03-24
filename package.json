@@ -1,9 +1,16 @@
 {
     "name": "flakeid53",
     "displayName": "Snowflake ID inspired distributed ID generator that fit into 53bits number.",
-    "version": "1.0.0",
-    "main": "./index.js",
+    "version": "1.0.1",
     "type": "module",
+    "main": "./index.cjs",
+    "exports": {
+        ".": {
+            "require": "./index.cjs",
+            "default": "./index.js"
+        }
+    },
+    "module": "./index.js",
     "author": "Adrian Dimitrov <dimitrov.adrian@gmail.com>",
     "license": "MIT",
     "homepage": "https://github.com/dimitrov-adrian/flakeid53",
@@ -13,9 +20,6 @@
     },
     "bugs": {
         "url": "https://github.com/dimitrov-adrian/flakeid53/issues"
-    },
-    "publishConfig": {
-        "registry": "https://npm.pkg.github.com"
     },
     "keywords": [
         "snowflake",
