@@ -1,12 +1,19 @@
-import { describe, it, expect } from "@jest/globals";
+import {
+    describe,
+    it,
+    expect,
+    afterEach,
+    beforeEach,
+    jest,
+} from "@jest/globals";
 import createFlakeID53 from "./index.js";
 
 describe("Initialization and setup", function () {
-    it("Check throws when no arguments", () => {
+    it("Should throws when no arguments", () => {
         expect(() => createFlakeID53()).toThrow();
     });
 
-    it("Check workerId out of range", () => {
+    it("Should throw when workerId out of range", () => {
         expect(() => {
             createFlakeID53({
                 epoch: +new Date("2020-03-10T12:34:56.123Z"),
@@ -15,7 +22,7 @@ describe("Initialization and setup", function () {
         }).toThrow();
     });
 
-    it("Check workerId in range", () => {
+    it("Should not throw when workerId in range", () => {
         expect(() => {
             createFlakeID53({
                 epoch: +new Date("2020-03-10T12:34:56.123Z"),
@@ -90,6 +97,70 @@ describe("Parsing", function () {
             time: 1911127240791,
             sequence: 372,
         });
+    });
+});
+
+describe("With mocked date", function () {
+    beforeEach(() => {
+        jest.useFakeTimers("modern");
+    });
+
+    afterEach(() => {
+        jest.useRealTimers();
+    });
+
+    it("First IDs", async () => {
+        jest.setSystemTime(+new Date("2020-03-10T12:34:56.123Z"));
+        const flakeId = createFlakeID53({
+            epoch: +new Date("2020-03-10T12:34:56.123Z"),
+            workerId: 1,
+        });
+        expect(await flakeId.nextId()).toStrictEqual(1000);
+        expect(await flakeId.nextId()).toStrictEqual(1001);
+        expect(await flakeId.nextId()).toStrictEqual(1002);
+    });
+
+    it("Last IDs", async () => {
+        jest.setSystemTime(+new Date("2048-03-10T12:34:56.123Z"));
+        const flakeId = createFlakeID53({
+            epoch: +new Date("2020-03-10T12:34:56.123Z"),
+            workerId: 1,
+        });
+        expect(await flakeId.nextId()).toStrictEqual(8836128000001000);
+        expect(await flakeId.nextId()).toStrictEqual(8836128000001001);
+        expect(await flakeId.nextId()).toStrictEqual(8836128000001002);
+    });
+
+    it("Last IDs in range", async () => {
+        jest.setSystemTime(+new Date("2048-03-10T12:34:56.123Z"));
+        const flakeId = createFlakeID53({
+            epoch: +new Date("2020-03-10T12:34:56.123Z"),
+            workerId: 1,
+        });
+        for (let i = 0; i < 999; i++) {
+            const id = await flakeId.nextId();
+            expect(id).toBeLessThan(Number.MAX_SAFE_INTEGER);
+        }
+    });
+
+    it("Must throw when epoch is out of range", async () => {
+        const flakeId = createFlakeID53({
+            epoch: +new Date("2020-03-10T12:34:56.123Z"),
+            workerId: 1,
+        });
+        jest.setSystemTime(+new Date("2018-03-10T12:34:56.123Z"));
+        await expect(flakeId.nextId()).rejects.toEqual("Epoch is out of range");
+    });
+
+    it("Must throw when ID time is out of range", async () => {
+        const flakeId = createFlakeID53({
+            epoch: +new Date("2020-03-10T12:34:56.123Z"),
+            workerId: 1,
+        });
+        jest.setSystemTime(+new Date("2049-03-10T12:34:56.123Z"));
+        await expect(flakeId.nextId()).rejects.toMatch(
+            "Number.MAX_SAFE_INTEGER"
+        );
     });
 });
 

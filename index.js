@@ -49,7 +49,10 @@ export default function createFlakeID53({ epoch, workerId }) {
      */
     function nextIdPromise(resolve, reject) {
         const current = new Date().valueOf();
-        if (sequenceTime < current) {
+
+        if (current < epoch) {
+            return reject("Epoch is out of range");
+        } else if (sequenceTime < current) {
             sequenceRound = 0;
             sequenceTime = current;
         } else if (sequenceTime > current) {
@@ -62,7 +65,8 @@ export default function createFlakeID53({ epoch, workerId }) {
             setTimeout(nextIdPromise, 1, resolve, reject);
         } else {
             const t = (current - epoch) % 1000000000000;
-            if (t > 900719925473) {
+            const oor = (current - epoch) / 1000000000000;
+            if (oor >= 1 || t > 900719925473) {
                 reject(
                     `Timestamp ${current} is out of range. Reject generating ID as it could exceed Number.MAX_SAFE_INTEGER`
                 );

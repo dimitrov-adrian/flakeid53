@@ -33,16 +33,15 @@ npm install flakeid53
 
 #### Options
 
-`epoch: Number` Time to start the epoch of the snowflake generation, it will be used as substract for given current
-time, to produce the first 38 bits.
+`epoch: Number` Time to start the epoch of the snowflake generation, it will be used as substract for given current time, to produce the first 12 digits.
 
 `workerId: Number` 0-9 range machine or worker ID. It is usefull in case of usage on distributed systems.
 
 ```js
 // Use as node module
 
-const flakeId = require('flakeid53')({
-    epoch: +new Date('2021-03-03'),
+const flakeId = require("flakeid53")({
+    epoch: +new Date("2021-03-03"),
     workerId: 2,
 });
 ```
@@ -50,10 +49,10 @@ const flakeId = require('flakeid53')({
 ```js
 // Use as ES module
 
-import createFlakeID53 from 'flakeid53';
+import createFlakeID53 from "flakeid53";
 
 const flakeId = createFlakeID53({
-    epoch: +new Date('2021-03-03'),
+    epoch: +new Date("2021-03-03"),
     workerId: 2,
 });
 ```
