@@ -31,7 +31,8 @@
         "node": ">=12.0.0"
     },
     "scripts": {
-        "build": "rollup --format 'cjs' --file 'index.cjs' 'index.js'",
+        "build": "rollup --exports 'default' --format 'cjs' --file 'index.cjs' 'index.js'",
+        "prepublishOnly": "npm run build",
         "test": "NODE_NO_WARNINGS=1 NODE_OPTIONS='--experimental-vm-modules --trace-warnings --trace-uncaught' jest"
     },
     "devDependencies": {
