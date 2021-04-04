@@ -31,9 +31,11 @@
         "node": ">=12.0.0"
     },
     "scripts": {
+        "build": "rollup --format 'cjs' --file 'index.cjs' 'index.js'",
         "test": "NODE_NO_WARNINGS=1 NODE_OPTIONS='--experimental-vm-modules --trace-warnings --trace-uncaught' jest"
     },
     "devDependencies": {
-        "jest": "^26.6.3"
+        "jest": "^26.6.3",
+        "rollup": "2.44.0"
     }
 }
