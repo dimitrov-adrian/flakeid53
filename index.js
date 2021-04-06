@@ -78,7 +78,7 @@ export default function createFlakeID53({ epoch, workerId }) {
 
     function parse(id) {
         return {
-            time: Math.floor(id / 1000) + epoch,
+            time: new Date(Math.floor(id / 10000) + epoch),
             sequence: id % 1000,
             workerId: Math.floor((id % 10000) / 1000),
         };

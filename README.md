@@ -1,9 +1,9 @@
 # Flake ID 53
 
 Simple module that aims to provide snowflake alike ID generator that fits into
-[53bit number as specificed on](https://en.wikipedia.org/wiki/IEEE_754) .
+[53bit number as specificed on IEEE_754.](https://en.wikipedia.org/wiki/IEEE_754)
 
-As being limited to 53bit number, there is some limitation in the timespan, machine and sequence range.
+As being limited to 53bit number, there is some limitations:
 
 -   Timespan is limited to _28_ years for given epoch
 -   Machine ID is limited from `0..9`
@@ -57,6 +57,17 @@ const flakeId = createFlakeID53({
 });
 ```
 
+```js
+// Use in Deno
+
+import createFlakeID53 from "https://raw.githubusercontent.com/dimitrov-adrian/flakeid53/1.0.3/index.js";
+
+const flakeId = createFlakeID53({
+    epoch: +new Date("2021-03-03"),
+    workerId: 2,
+});
+```
+
 ### Generate ID
 
 `nextId()` returns a promise that resolve to next ID number.
@@ -72,7 +83,7 @@ await flakeId.nextId();
 ```js
 flakeId.parse(8470564087028);
 
-// Outputs: { time: 1624195860210, workerId: 7, sequence: 28 }
+// Outputs: { time: 2021-03-12T19:17:36.408Z, workerId: 7, sequence: 28 }
 ```
 
 ## Why this module?
