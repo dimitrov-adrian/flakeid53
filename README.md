@@ -60,7 +60,7 @@ const flakeId = createFlakeID53({
 ```js
 // Use in Deno
 
-import createFlakeID53 from "https://raw.githubusercontent.com/dimitrov-adrian/flakeid53/1.0.3/index.js";
+import createFlakeID53 from "https://raw.githubusercontent.com/dimitrov-adrian/flakeid53/v1.0.3/index.js";
 
 const flakeId = createFlakeID53({
     epoch: +new Date("2021-03-03"),
