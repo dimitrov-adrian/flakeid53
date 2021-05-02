@@ -42,12 +42,12 @@ describe("Function setup and init", function () {
 });
 
 describe("Format", function () {
-    it("Minimum length of 8", async () => {
+    it("Minimum value", async () => {
         const flakeId = createFlakeID53({
             epoch: +new Date("2020-03-10T12:34:56.123Z"),
             workerId: 1,
         });
-        expect((await flakeId.nextId().toString().length) > 8).toBeTruthy();
+        expect(await flakeId.nextId()).toBeGreaterThanOrEqual(1000);
     });
 
     it("Worker ID sequence", async () => {
@@ -146,7 +146,7 @@ describe("Generate IDs", function () {
             epoch: +new Date("2020-03-10T12:34:56.123Z"),
             workerId: 1,
         });
-        const samples = 100000;
+        const samples = 12345;
         const values = [];
         for (let i = 0; i < samples; i++, values.push(await flakeId.nextId()));
         expect(
@@ -166,6 +166,38 @@ describe("Generate IDs", function () {
             (value, index, self) => self.indexOf(value) === index
         );
         expect(uniques.length).toStrictEqual(samples.length);
+    });
+
+    it("Distributed generating must be unique", async () => {
+        const flakeId = [
+            createFlakeID53({
+                epoch: +new Date("2020-03-10T12:34:56.123Z"),
+                workerId: 1,
+            }),
+            createFlakeID53({
+                epoch: +new Date("2020-03-10T12:34:56.123Z"),
+                workerId: 2,
+            }),
+            createFlakeID53({
+                epoch: +new Date("2020-03-10T12:34:56.123Z"),
+                workerId: 6,
+            }),
+            createFlakeID53({
+                epoch: +new Date("2020-03-10T12:34:56.123Z"),
+                workerId: 8,
+            }),
+        ];
+        const samples = 1234;
+        const values = [];
+        for (let i = 0; i < samples; i++) {
+            for (let j = 0; j < flakeId.length; j++) {
+                values.push(await flakeId[j].nextId());
+            }
+        }
+        expect(
+            values.filter((value, index, self) => self.indexOf(value) === index)
+                .length
+        ).toStrictEqual(samples * flakeId.length);
     });
 
     describe("With mocked date", function () {
