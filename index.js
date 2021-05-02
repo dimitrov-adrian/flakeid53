@@ -12,17 +12,17 @@
  */
 export default function createFlakeID53({ epoch, workerId }) {
     let sequenceTime = 0;
-    let sequenceRound = 0;
+    let sequenceTick = 0;
 
     if (!epoch) {
         throw Error("No epoch set");
     }
 
     if (workerId && !Number.isInteger(workerId)) {
-        throw Error("Cannot use id out of 0..9");
+        throw Error("Cannot use workerId out of 0..9");
     }
 
-    workerId = (workerId || 0) % 10;
+    workerId = Math.abs((workerId || 0) % 10);
 
     return {
         /**
@@ -48,30 +48,28 @@ export default function createFlakeID53({ epoch, workerId }) {
      * @param {CallableFunction} reject
      */
     function nextIdPromise(resolve, reject) {
-        const current = new Date().valueOf();
+        const current = Date.now();
 
         if (current < epoch) {
             return reject("Epoch is out of range");
         } else if (sequenceTime < current) {
-            sequenceRound = 0;
+            sequenceTick = 0;
             sequenceTime = current;
         } else if (sequenceTime > current) {
             return reject("Clock is shifted");
         } else {
-            sequenceRound++;
+            sequenceTick++;
         }
 
-        if (sequenceRound > 999) {
+        if (sequenceTick > 999) {
             setTimeout(nextIdPromise, 1, resolve, reject);
         } else {
             const t = (current - epoch) % 1000000000000;
             const oor = (current - epoch) / 1000000000000;
             if (oor >= 1 || t > 900719925473) {
-                reject(
-                    `Timestamp ${current} is out of range. Reject generating ID as it could exceed Number.MAX_SAFE_INTEGER`
-                );
+                reject(`Timestamp ${current} is out of range. Rejecting ID generating, as it could exceed Number.MAX_SAFE_INTEGER`);
             } else {
-                resolve((t * 10 + workerId) * 1000 + sequenceRound);
+                resolve((t * 10 + workerId) * 1000 + sequenceTick);
             }
         }
     }
