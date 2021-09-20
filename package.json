@@ -33,10 +33,10 @@
     "scripts": {
         "build": "rollup --exports 'default' --format 'cjs' --file 'index.cjs' 'index.js'",
         "prepublishOnly": "npm run build",
-        "test": "NODE_NO_WARNINGS=1 NODE_OPTIONS='--experimental-vm-modules --trace-warnings --trace-uncaught' jest"
+        "test": "NODE_OPTIONS='--experimental-vm-modules --trace-warnings --trace-uncaught' jest"
     },
     "devDependencies": {
-        "jest": "^26.6.3",
-        "rollup": "2.44.0"
+        "jest": "^27.2.0",
+        "rollup": "^2.56.3"
     }
 }
