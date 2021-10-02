@@ -1,6 +1,6 @@
 # Flake ID 53
 
-Simple module that aims to provide snowflake alike ID generator that fits into
+Simple module that aims to provide [snowflake](https://en.wikipedia.org/wiki/Snowflake_ID) alike ID generator that fits into
 [53bit number as specificed on IEEE_754.](https://en.wikipedia.org/wiki/IEEE_754)
 
 As being limited to 53bit number, there is some limitations:
@@ -60,7 +60,7 @@ const flakeId = createFlakeID53({
 ```js
 // Use in Deno
 
-import createFlakeID53 from "https://raw.githubusercontent.com/dimitrov-adrian/flakeid53/v1.0.4/index.js";
+import createFlakeID53 from "https://cdn.jsdelivr.net/npm/flakeid53/index.js"
 
 const flakeId = createFlakeID53({
     epoch: +new Date("2021-03-03"),

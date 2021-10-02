@@ -1,12 +1,4 @@
-import {
-    describe,
-    it,
-    expect,
-    afterEach,
-    beforeEach,
-    jest,
-} from "@jest/globals";
-
+import { describe, it, expect, afterEach, beforeEach, jest } from "@jest/globals";
 import createFlakeID53 from "./index.js";
 
 describe("Function setup and init", function () {
@@ -32,7 +24,7 @@ describe("Function setup and init", function () {
         }).not.toThrow();
     });
 
-    it("Int is less than max safe int", async () => {
+    it("Produced number must be less than MAX_SAFE_INTEGER", async () => {
         const flakeId = createFlakeID53({
             epoch: +new Date("2020-03-10T12:34:56.123Z"),
             workerId: 1,
@@ -161,7 +153,7 @@ describe("Generate IDs", function () {
             workerId: 1,
         });
         const samples = [];
-        for (let i = 0; i < 10000; i++, samples.push(await flakeId.nextId()));
+        for (let i = 0; i < 20000; i++, samples.push(await flakeId.nextId()));
         const uniques = samples.filter(
             (value, index, self) => self.indexOf(value) === index
         );
@@ -187,7 +179,7 @@ describe("Generate IDs", function () {
                 workerId: 8,
             }),
         ];
-        const samples = 1234;
+        const samples = 4321;
         const values = [];
         for (let i = 0; i < samples; i++) {
             for (let j = 0; j < flakeId.length; j++) {

@@ -25,27 +25,21 @@ export default function createFlakeID53({ epoch, workerId }) {
     workerId = Math.abs((workerId || 0) % 10);
 
     return {
-        /**
-         * Generate next ID number
-         * @returns {() => Promise<number>}
-         */
         nextId,
-
-        /**
-         * Parse ID number into pieces
-         * @param {number} id
-         * @returns {{time: number, workerId: number, sequence: number}}
-         */
         parse,
     };
 
+    /**
+     * Generate next ID number
+     * @returns {Promise<number>} next int ID, or fail with message
+     */
     function nextId() {
         return new Promise(nextIdPromise);
     }
 
     /**
-     * @param {CallableFunction} resolve
-     * @param {CallableFunction} reject
+     * @param {(num: number) => void} resolve
+     * @param {(error: any) => void} reject
      */
     function nextIdPromise(resolve, reject) {
         const current = Date.now();
@@ -74,6 +68,11 @@ export default function createFlakeID53({ epoch, workerId }) {
         }
     }
 
+    /**
+     * Parse ID number into pieces
+     * @param {number} id
+     * @returns {{time: Date, workerId: number, sequence: number}}
+     */
     function parse(id) {
         return {
             time: new Date(Math.floor(id / 10000) + epoch),
